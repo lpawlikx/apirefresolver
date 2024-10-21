@@ -77,6 +77,49 @@ paths:
                     type: integer
                     description: Number of timestamps returned
                     example: 40
+                  city:
+                    type: object
+                    description: Information about the requested city
+                    properties:
+                      id:
+                        type: integer
+                        description: City ID
+                        example: 2643743
+                      name:
+                        type: string
+                        description: City name
+                        example: "London"
+                      coord:
+                        type: object
+                        properties:
+                          lat:
+                            type: number
+                            description: City latitude
+                            example: 51.5085
+                          lon:
+                            type: number
+                            description: City longitude
+                            example: -0.1257
+                      country:
+                        type: string
+                        description: Country code (ISO 3166)
+                        example: "GB"
+                      population:
+                        type: integer
+                        description: City population
+                        example: 1000000
+                      timezone:
+                        type: integer
+                        description: Shift in seconds from UTC
+                        example: 0
+                      sunrise:
+                        type: integer
+                        description: Sunrise time, Unix timestamp
+                        example: 1647324902
+                      sunset:
+                        type: integer
+                        description: Sunset time, Unix timestamp
+                        example: 1647367441
                   list:
                     type: array
                     items:
@@ -165,6 +208,22 @@ paths:
                               type: number
                               description: Wind gust speed
                               example: 4.3
+                        rain:
+                          type: object
+                          description: Rain volume information
+                          properties:
+                            3h:
+                              type: number
+                              description: Rain volume for last 3 hours (mm)
+                              example: 0.5
+                        snow:
+                          type: object
+                          description: Snow volume information
+                          properties:
+                            3h:
+                              type: number
+                              description: Snow volume for last 3 hours (mm)
+                              example: 0.2
                         visibility:
                           type: integer
                           description: Average visibility (metres)
