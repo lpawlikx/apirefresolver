@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: OpenWeather 5-Day Forecast API
+  description: API for retrieving 5-day weather forecast data with 3-hour steps
+  version: '1.0'
+  contact:
+    name: OpenWeather
+    url: https://openweathermap.org
+servers:
+  - url: https://api.openweathermap.org/data/2.5
+    description: Production server
+paths:
+  /forecast:
+    get:
+      summary: Get 5-day weather forecast
+      description: Returns weather forecast data in 3-hour steps for a specific location
+      parameters:
+        - name: q
+          in: query
+          description: City name, state code and country code divided by comma. Use ISO 3166 country codes.
+          required: true
+          schema:
+            type: string
+            example: "London,UK"
+        - name: appid
+          in: query
+          description: Your unique API key
+          required: true
+          schema:
+            type: string
+        - name: mode
+          in: query
+          description: Response format (JSON by default)
+          required: false
+          schema:
+            type: string
+            enum: [json, xml]
+            default: json
+        - name: cnt
+          in: query
+          description: Number of timestamps to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 40
+        - name: units
+          in: query
+          description: Units of measurement
+          required: false
+          schema:
+            type: string
+            enum: [standard, metric, imperial]
+            default: standard
+        - name: lang
+          in: query
+          description: Language for weather descriptions
+          required: false
+          schema:
+            type: string
+            example: "en"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cod:
+                    type: string
+                    example: "200"
+                  message:
+                    type: integer
+                    example: 0
+                  cnt:
+                    type: integer
+                    description: Number of timestamps returned
+                    example: 40
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dt:
+                          type: integer
+                          description: Time of forecast, unix timestamp
+                          example: 1647345600
+                        main:
+                          type: object
+                          properties:
+                            temp:
+                              type: number
+                              description: Temperature
+                              example: 287.39
+                            feels_like:
+                              type: number
+                              description: Human perception of weather
+                              example: 286.38
+                            temp_min:
+                              type: number
+                              example: 286.69
+                            temp_max:
+                              type: number
+                              example: 287.39
+                            pressure:
+                              type: integer
+                              description: Atmospheric pressure (hPa)
+                              example: 1021
+                            sea_level:
+                              type: integer
+                              description: Pressure at sea level (hPa)
+                              example: 1021
+                            grnd_level:
+                              type: integer
+                              description: Pressure at ground level (hPa)
+                              example: 1018
+                            humidity:
+                              type: integer
+                              description: Humidity (%)
+                              example: 58
+                            temp_kf:
+                              type: number
+                              example: 0.7
+                        weather:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: Weather condition id
+                                example: 803
+                              main:
+                                type: string
+                                description: Group of weather parameters
+                                example: "Clouds"
+                              description:
+                                type: string
+                                description: Weather condition description
+                                example: "broken clouds"
+                              icon:
+                                type: string
+                                description: Weather icon id
+                                example: "04d"
+                        clouds:
+                          type: object
+                          properties:
+                            all:
+                              type: integer
+                              description: Cloudiness (%)
+                              example: 71
+                        wind:
+                          type: object
+                          properties:
+                            speed:
+                              type: number
+                              description: Wind speed
+                              example: 3.08
+                            deg:
+                              type: integer
+                              description: Wind direction (degrees)
+                              example: 128
+                            gust:
+                              type: number
+                              description: Wind gust speed
+                              example: 4.3
+                        visibility:
+                          type: integer
+                          description: Average visibility (metres)
+                          example: 10000
+                        pop:
+                          type: number
+                          description: Probability of precipitation
+                          example: 0
+                        sys:
+                          type: object
+                          properties:
+                            pod:
+                              type: string
+                              description: Part of day (d = day, n = night)
+                              example: "d"
+                        dt_txt:
+                          type: string
+                          description: Time of forecast in text format
+                          example: "2022-03-15 12:00:00"
+        '401':
+          description: Invalid API key
+        '404':
+          description: City not found
+        '429':
+          description: Too many requests
