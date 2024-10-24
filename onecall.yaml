@@ -1,0 +1,290 @@
+openapi: 3.0.0
+info:
+  title: OpenWeather OneCall API
+  version: '3.0'
+  description: Get current weather, minute forecast for 1 hour, hourly forecast for 48 hours, daily forecast for 8 days and government weather alerts
+servers:
+  - url: https://api.openweathermap.org/data/3.0
+paths:
+  /onecall:
+    get:
+      summary: Get weather data for specific location
+      description: Get current weather, forecasts, and alerts for a specific location
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema:
+            type: number
+            minimum: -90
+            maximum: 90
+          description: Latitude coordinate
+        - name: lon
+          in: query
+          required: true
+          schema:
+            type: number
+            minimum: -180
+            maximum: 180
+          description: Longitude coordinate
+        - name: appid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Your unique API key
+        - name: exclude
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Comma-separated list of data blocks to exclude from response (current,minutely,hourly,daily,alerts)
+        - name: units
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [standard, metric, imperial]
+            default: standard
+          description: Units of measurement
+        - name: lang
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Language for weather descriptions
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lat:
+                    type: number
+                    example: 33.44
+                  lon:
+                    type: number
+                    example: -94.04
+                  timezone:
+                    type: string
+                    example: "America/Chicago"
+                  timezone_offset:
+                    type: integer
+                    example: -18000
+                  current:
+                    type: object
+                    properties:
+                      dt:
+                        type: integer
+                        description: Current time, Unix timestamp
+                      sunrise:
+                        type: integer
+                        description: Sunrise time, Unix timestamp
+                      sunset:
+                        type: integer
+                        description: Sunset time, Unix timestamp
+                      temp:
+                        type: number
+                        description: Temperature
+                      feels_like:
+                        type: number
+                        description: Feels like temperature
+                      pressure:
+                        type: integer
+                        description: Atmospheric pressure, hPa
+                      humidity:
+                        type: integer
+                        description: Humidity, %
+                      dew_point:
+                        type: number
+                        description: Dew point
+                      uvi:
+                        type: number
+                        description: UV index
+                      clouds:
+                        type: integer
+                        description: Cloudiness, %
+                      visibility:
+                        type: integer
+                        description: Average visibility, metres
+                      wind_speed:
+                        type: number
+                        description: Wind speed
+                      wind_deg:
+                        type: integer
+                        description: Wind direction, degrees
+                      wind_gust:
+                        type: number
+                        description: Wind gust
+                      weather:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            main:
+                              type: string
+                            description:
+                              type: string
+                            icon:
+                              type: string
+                  minutely:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dt:
+                          type: integer
+                          description: Time of forecasted data, Unix timestamp
+                        precipitation:
+                          type: number
+                          description: Precipitation volume, mm
+                  hourly:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dt:
+                          type: integer
+                        temp:
+                          type: number
+                        feels_like:
+                          type: number
+                        pressure:
+                          type: integer
+                        humidity:
+                          type: integer
+                        dew_point:
+                          type: number
+                        uvi:
+                          type: number
+                        clouds:
+                          type: integer
+                        visibility:
+                          type: integer
+                        wind_speed:
+                          type: number
+                        wind_deg:
+                          type: integer
+                        wind_gust:
+                          type: number
+                        weather:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              main:
+                                type: string
+                              description:
+                                type: string
+                              icon:
+                                type: string
+                        pop:
+                          type: number
+                          description: Probability of precipitation
+                  daily:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dt:
+                          type: integer
+                        sunrise:
+                          type: integer
+                        sunset:
+                          type: integer
+                        moonrise:
+                          type: integer
+                        moonset:
+                          type: integer
+                        moon_phase:
+                          type: number
+                        summary:
+                          type: string
+                        temp:
+                          type: object
+                          properties:
+                            day:
+                              type: number
+                            min:
+                              type: number
+                            max:
+                              type: number
+                            night:
+                              type: number
+                            eve:
+                              type: number
+                            morn:
+                              type: number
+                        feels_like:
+                          type: object
+                          properties:
+                            day:
+                              type: number
+                            night:
+                              type: number
+                            eve:
+                              type: number
+                            morn:
+                              type: number
+                        pressure:
+                          type: integer
+                        humidity:
+                          type: integer
+                        dew_point:
+                          type: number
+                        wind_speed:
+                          type: number
+                        wind_deg:
+                          type: integer
+                        wind_gust:
+                          type: number
+                        weather:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              main:
+                                type: string
+                              description:
+                                type: string
+                              icon:
+                                type: string
+                        clouds:
+                          type: integer
+                        pop:
+                          type: number
+                        rain:
+                          type: number
+                          description: Precipitation volume for day, mm
+                        snow:
+                          type: number
+                          description: Snow volume for day, mm
+                        uvi:
+                          type: number
+                  alerts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sender_name:
+                          type: string
+                        event:
+                          type: string
+                        start:
+                          type: integer
+                        end:
+                          type: integer
+                        description:
+                          type: string
+                        tags:
+                          type: array
+                          items:
+                            type: string
